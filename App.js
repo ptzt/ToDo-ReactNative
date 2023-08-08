@@ -4,24 +4,27 @@ import { useState, useRef } from 'react';
 
 import Task from './components/Task';
 
-
 export default function App() {
 
   const [modalVisible, setModalVisible] = useState(false)
-  const [tasks, setTasks] = useState([{ text: 'Hacer la compra', completed: false }, { text: 'Pasear al perro', completed: false }])
-  // const [tasks, setTasks] = useState('')
+  const [tasks, setTasks] = useState('')
   const [newTask, setNewTask] = useState('')
   const inputRef = useRef(null)
+  const [temporalTask, setTemporalTask] = useState([]);
+  const [dailyTask, setDailyTask] = useState([]);
 
-
-  const addTask = () => {
+  const addTask = (type) => {
     if (newTask !== '') {
-      const newTaskObj = { text: newTask, completed: false }
-      setTasks([...tasks, newTaskObj])
+      const newTaskObj = { text: newTask, completed: false, type: type }
+      if (type === 'temporal') {
+        setTemporalTask([...temporalTask, newTaskObj])
+      } else if (type === 'diaria') {
+        setDailyTask([...dailyTask, newTaskObj])
+      }
+
       setNewTask('')
       setModalVisible(false)
       Alert.alert('Se agrego!')
-
     } else {
       Alert.alert('La tarea no puede estar vacia!')
     }
@@ -57,10 +60,11 @@ export default function App() {
               onChangeText={text => setNewTask(text)}
               ref={inputRef}
             />
-            <View style={{ flexDirection: 'row' }}>
-              <TouchableOpacity style={styles.button} onPress={addTask}><Text>Agregar</Text></TouchableOpacity>
-              <TouchableOpacity style={styles.button} onPress={() => setModalVisible(false)}><Text>Cancelar</Text></TouchableOpacity>
+            <View style={{ flexDirection: 'row', marginTop: 15 }}>
+              <TouchableOpacity style={styles.button} onPress={() => { addTask('temporal') }}><Text>Tarea temporal</Text></TouchableOpacity>
+              <TouchableOpacity style={styles.button} onPress={() => { addTask('diaria') }}><Text>Tarea diaria</Text></TouchableOpacity>
             </View>
+            <TouchableOpacity style={styles.button} onPress={() => setModalVisible(false)}><Text>Cancelar</Text></TouchableOpacity>
           </View>
         </View>
       </Modal>
@@ -72,15 +76,26 @@ export default function App() {
             inputRef.current.focus(); // Enfocar el TextInput
           }, 100); // Ajusta el tiempo si es necesario
         }}><Text>Agregar tarea</Text></TouchableOpacity>
+
+
       </View>
       <FlatList
         style={styles.list}
         ListHeaderComponent={<Text style={styles.text}>Tareas pendientes</Text>}
         ListEmptyComponent={<Text style={styles.textList}>No hay tareas pendientes</Text>}
-        data={tasks}
+        data={temporalTask}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item, index }) => (<Task task={item.text.trim()} completed={item.completed} onToggle={() => toggleTask(index)} />)}
       />
+      <FlatList
+        style={styles.list}
+        ListHeaderComponent={<Text style={styles.text}>Tareas diarias</Text>}
+        ListEmptyComponent={<Text style={styles.textList}>No hay tareas diarias</Text>}
+        data={dailyTask}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({ item, index }) => (<Task task={item.text.trim()} completed={item.completed} onToggle={() => toggleTask(index)} />)}
+      />
+
       <StatusBar style='light' />
     </View>
   );
@@ -120,7 +135,7 @@ const styles = StyleSheet.create({
     color: 'white',
     marginTop: 10,
   },
-  list: { marginLeft: 20 },
+  list: { marginLeft: 20, height: '100%', width: '100%' },
   textList: {
     fontSize: 20,
     color: 'white',
@@ -140,11 +155,17 @@ const styles = StyleSheet.create({
     padding: 10,
     elevation: 2,
     backgroundColor: 'white',
-    margin: 6
+    margin: 6,
   },
   modalContainer: {
     flex: 1,
     alignItems: 'center',
     backgroundColor: 'rgba(0,0,0,0.6)',
+  },
+  checkbox: {
+    flexDirection: 'row',
+    marginRight: 4,
+    marginLeft: 4,
+    padding: 8
   }
 });
