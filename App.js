@@ -9,6 +9,7 @@ export default function App() {
 
   const [modalVisible, setModalVisible] = useState(false)
   const [tasks, setTasks] = useState([{ text: 'Hacer la compra', completed: false }, { text: 'Pasear al perro', completed: false }])
+  // const [tasks, setTasks] = useState('')
   const [newTask, setNewTask] = useState('')
   const inputRef = useRef(null)
 
@@ -40,8 +41,9 @@ export default function App() {
       <Modal
         transparent={true}
         visible={modalVisible}
+        animationType='slide'
       >
-        <View style={styles.container}>
+        <View style={styles.prueba}>
           <View style={styles.modalView}>
             <TextInput
               placeholder='Agregar nueva tarea'
@@ -49,14 +51,16 @@ export default function App() {
               onChangeText={text => setNewTask(text)}
               ref={inputRef}
             />
-            <TouchableOpacity style={styles.button} onPress={addTask}><Text>Agregar</Text></TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={() => setModalVisible(false)}><Text>Cancelar</Text></TouchableOpacity>
+            <View style={{ flexDirection: 'row' }}>
+              <TouchableOpacity style={styles.button} onPress={addTask}><Text>Agregar</Text></TouchableOpacity>
+              <TouchableOpacity style={styles.button} onPress={() => setModalVisible(false)}><Text>Cancelar</Text></TouchableOpacity>
+            </View>
           </View>
         </View>
       </Modal>
       <View style={styles.header}>
         <Text style={styles.leftText}>ToDo</Text>
-        <TouchableOpacity style={styles.button} onPress={() => {
+        <TouchableOpacity style={styles.buttonRigth} onPress={() => {
           setModalVisible(true);
           setTimeout(() => {
             inputRef.current.focus(); // Enfocar el TextInput
@@ -64,6 +68,9 @@ export default function App() {
         }}><Text>Agregar tarea</Text></TouchableOpacity>
       </View>
       <FlatList
+        style={styles.list}
+        ListHeaderComponent={<Text style={styles.text}>Tareas pendientes</Text>}
+        ListEmptyComponent={<Text style={styles.textList}>No hay tareas pendientes</Text>}
         data={tasks}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item, index }) => (<Task task={item.text} completed={item.completed} onToggle={() => toggleTask(index)} />)}
@@ -77,7 +84,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#25292e',
-    alignItems: 'center',
+    alignItems: 'flex-start',
   },
   header: {
     flexDirection: 'row',
@@ -85,7 +92,8 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     marginTop: 40,
-    marginBottom: 10
+    marginBottom: 10,
+
   },
   leftText: {
     color: 'white',
@@ -106,16 +114,31 @@ const styles = StyleSheet.create({
     color: 'white',
     marginTop: 10,
   },
+  list: { marginLeft: 20 },
+  textList: {
+    fontSize: 20,
+    color: 'white',
+    marginTop: 20,
+    opacity: 0.3,
+    fontWeight: 'bold'
+  },
   modalView: {
     backgroundColor: 'white',
     borderRadius: 20,
     padding: 35,
     alignItems: 'center',
+    width: '80%'
   },
   button: {
     borderRadius: 20,
     padding: 10,
     elevation: 2,
-    backgroundColor: 'white'
+    backgroundColor: 'white',
+    margin: 6
   },
+  prueba: {
+    flex: 1,
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.6)',
+  }
 });
