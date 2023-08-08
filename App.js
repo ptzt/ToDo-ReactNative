@@ -13,12 +13,18 @@ export default function App() {
   const [newTask, setNewTask] = useState('')
   const inputRef = useRef(null)
 
+
   const addTask = () => {
-    const newTaskObj = { text: newTask, completed: false }
-    setTasks([...tasks, newTaskObj])
-    setNewTask()
-    setModalVisible(false)
-    Alert.alert('Se agrego!')
+    if (newTask !== '') {
+      const newTaskObj = { text: newTask, completed: false }
+      setTasks([...tasks, newTaskObj])
+      setNewTask('')
+      setModalVisible(false)
+      Alert.alert('Se agrego!')
+
+    } else {
+      Alert.alert('La tarea no puede estar vacia!')
+    }
   }
 
   const toggleTask = (index) => {
@@ -43,7 +49,7 @@ export default function App() {
         visible={modalVisible}
         animationType='slide'
       >
-        <View style={styles.prueba}>
+        <View style={styles.modalContainer}>
           <View style={styles.modalView}>
             <TextInput
               placeholder='Agregar nueva tarea'
@@ -73,7 +79,7 @@ export default function App() {
         ListEmptyComponent={<Text style={styles.textList}>No hay tareas pendientes</Text>}
         data={tasks}
         keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item, index }) => (<Task task={item.text} completed={item.completed} onToggle={() => toggleTask(index)} />)}
+        renderItem={({ item, index }) => (<Task task={item.text.trim()} completed={item.completed} onToggle={() => toggleTask(index)} />)}
       />
       <StatusBar style='light' />
     </View>
@@ -136,7 +142,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     margin: 6
   },
-  prueba: {
+  modalContainer: {
     flex: 1,
     alignItems: 'center',
     backgroundColor: 'rgba(0,0,0,0.6)',
