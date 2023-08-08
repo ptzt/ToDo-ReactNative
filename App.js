@@ -30,17 +30,25 @@ export default function App() {
     }
   }
 
-  const toggleTask = (index) => {
-    const newTask = tasks.map((task, i) => {
-      if (i === index) {
-        return {
-          ...task,
-          completed: !task.completed
+  const toggleTask = (index, type) => {
+    if (type === 'temporal') {
+      const newTask = temporalTask.filter((_, i) => i !== index)
+      setTemporalTask(newTask)
+    } else if (type === 'diaria') {
+      const newDailyTask = dailyTask.map((task, i) => {
+        if (i === index) {
+          return {
+            ...task,
+            completed: !task.completed
+          }
         }
-      }
-      return task
-    })
-    setTasks(newTask)
+        return task
+      })
+      setDailyTask(newDailyTask)
+    }
+
+
+
   }
 
 
@@ -85,7 +93,7 @@ export default function App() {
         ListEmptyComponent={<Text style={styles.textList}>No hay tareas pendientes</Text>}
         data={temporalTask}
         keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item, index }) => (<Task task={item.text.trim()} completed={item.completed} onToggle={() => toggleTask(index)} />)}
+        renderItem={({ item, index }) => (<Task task={item.text.trim()} completed={item.completed} onToggle={() => toggleTask(index, 'temporal')} />)}
       />
       <FlatList
         style={styles.list}
@@ -93,10 +101,10 @@ export default function App() {
         ListEmptyComponent={<Text style={styles.textList}>No hay tareas diarias</Text>}
         data={dailyTask}
         keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item, index }) => (<Task task={item.text.trim()} completed={item.completed} onToggle={() => toggleTask(index)} />)}
+        renderItem={({ item, index }) => (<Task task={item.text.trim()} completed={item.completed} onToggle={() => toggleTask(index, 'diaria')} />)}
       />
 
-      <StatusBar style='light' />
+      <StatusBar style='dark' />
     </View>
   );
 }
@@ -104,7 +112,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#25292e',
+    backgroundColor: 'white',
     alignItems: 'flex-start',
   },
   header: {
@@ -117,7 +125,7 @@ const styles = StyleSheet.create({
 
   },
   leftText: {
-    color: 'white',
+    color: 'black',
     fontSize: 20,
     margin: 'auto',
     marginLeft: 20
@@ -132,13 +140,13 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 20,
-    color: 'white',
+    color: 'black',
     marginTop: 10,
   },
   list: { marginLeft: 20, height: '100%', width: '100%' },
   textList: {
     fontSize: 20,
-    color: 'white',
+    color: 'black',
     marginTop: 20,
     opacity: 0.3,
     fontWeight: 'bold'

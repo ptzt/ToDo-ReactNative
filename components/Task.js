@@ -12,7 +12,7 @@ const Task = ({ task, completed, onToggle }) => {
 
 const styles = StyleSheet.create({
     text: {
-        color: 'white',
+        color: 'black',
         padding: 5,
         fontSize: 22,
     },
@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
     },
     completedTask: {
         textDecorationLine: 'line-through',
-        color: 'white'
+        color: 'black'
     }
 })
 
