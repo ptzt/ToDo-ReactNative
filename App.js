@@ -58,7 +58,7 @@ export default function App() {
       <Modal
         transparent={true}
         visible={modalVisible}
-        animationType='slide'
+        onRequestClose={() => setModalVisible(false)}
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalView}>
