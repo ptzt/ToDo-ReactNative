@@ -112,7 +112,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: '#FAF9F6',
     alignItems: 'flex-start',
   },
   header: {
@@ -152,22 +152,24 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
   modalView: {
-    backgroundColor: 'white',
+    backgroundColor: '#FAF9F6',
     borderRadius: 20,
     padding: 35,
     alignItems: 'center',
-    width: '80%'
+    width: '80%',
   },
   button: {
     borderRadius: 20,
     padding: 10,
     elevation: 2,
-    backgroundColor: 'white',
+    backgroundColor: '#FAF9F6',
     margin: 6,
   },
   modalContainer: {
     flex: 1,
     alignItems: 'center',
+    flexDirection: 'column',
+    justifyContent: 'center',
     backgroundColor: 'rgba(0,0,0,0.6)',
   },
   checkbox: {
