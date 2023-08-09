@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TouchableOpacity, Modal, Alert, TextInput, FlatList, Vibration } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Modal, Alert, TextInput, FlatList, ScrollView, Vibration } from 'react-native';
 import { useState, useRef, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -56,6 +56,7 @@ export default function App() {
       }
     } else {
       Alert.alert('La tarea no puede estar vacia!')
+
     }
     Vibration.vibrate(150)
   }
@@ -96,6 +97,22 @@ export default function App() {
     Vibration.vibrate(150)
   }
 
+  const ResetDailyTask = async () => {
+    try {
+      const newDailyTask = dailyTask.map((task) => ({
+        ...task,
+        completed: false
+      }))
+
+      await AsyncStorage.setItem('dailyTasks', JSON.stringify(newDailyTask))
+      setDailyTask(newDailyTask)
+
+      Alert.alert('Tareas diarias reinicidas exitosamente')
+    } catch (error) {
+      console.error('Error al reiniciar las tareas diarias', error)
+    }
+  }
+
 
   return (
     <View style={styles.container}>
@@ -131,25 +148,65 @@ export default function App() {
 
 
       </View>
-      <FlatList
+      <Text style={styles.leftText}>Tareas temporales</Text>
+      <ScrollView style={styles.list}>
+        {temporalTask.length === 0 ? (
+          <Text style={styles.textList}>No hay tareas pendientes</Text>
+        ) : (
+          temporalTask.map((item, index) => (
+            <Task
+              key={index.toString()}
+              task={item.text.trim()}
+              completed={item.completed}
+              onToggle={() => toggleTask(index, 'temporal')}
+            />
+          ))
+        )}
+      </ScrollView>
+
+      {/* <FlatList
         style={styles.list}
-        ListHeaderComponent={<Text style={styles.text}>Tareas pendientes</Text>}
         ListEmptyComponent={<Text style={styles.textList}>No hay tareas pendientes</Text>}
         data={temporalTask}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item, index }) => (<Task task={item.text.trim()} completed={item.completed} onToggle={() => toggleTask(index, 'temporal')} />)}
-      />
-      <FlatList
+      /> */}
+      {/* <FlatList
         style={styles.list}
         ListHeaderComponent={<Text style={styles.text}>Tareas diarias</Text>}
         ListEmptyComponent={<Text style={styles.textList}>No hay tareas diarias</Text>}
+        keyboardShouldPersistTaps="handled"
         data={dailyTask}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item, index }) => (<Task task={item.text.trim()} completed={item.completed} onToggle={() => toggleTask(index, 'diaria')} />)}
-      />
+      /> */}
 
+
+      <View style={styles.header}>
+        <Text style={styles.leftText}>Tareas diarias</Text>
+        <TouchableOpacity style={styles.buttonRigth} onPress={ResetDailyTask}><Text>Reiniciar diarias</Text></TouchableOpacity>
+
+
+      </View>
+
+      <ScrollView style={styles.list}
+        keyboardShouldPersistTaps="handled"
+      >
+        {dailyTask.length === 0 ? (
+          <Text style={styles.textList}>No hay tareas diarias</Text>
+        ) : (
+          dailyTask.map((item, index) => (
+            <Task
+              key={index.toString()}
+              task={item.text.trim()}
+              completed={item.completed}
+              onToggle={() => toggleTask(index, 'diaria')}
+            />
+          ))
+        )}
+      </ScrollView>
       <StatusBar style='dark' />
-    </View>
+    </View >
   );
 }
 
@@ -170,7 +227,7 @@ const styles = StyleSheet.create({
   },
   leftText: {
     color: 'black',
-    fontSize: 20,
+    fontSize: 21,
     margin: 'auto',
     marginLeft: 20
   },
@@ -181,11 +238,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     alignSelf: 'flex-end',
     marginRight: 20
-  },
-  text: {
-    fontSize: 20,
-    color: 'black',
-    marginTop: 10,
   },
   list: { marginLeft: 20, height: '100%', width: '100%' },
   textList: {

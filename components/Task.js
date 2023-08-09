@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
     text: {
         color: 'black',
         padding: 5,
-        fontSize: 22,
+        fontSize: 17,
     },
     taskContainer: {
         flexDirection: 'row',
