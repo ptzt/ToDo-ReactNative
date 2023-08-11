@@ -1,10 +1,10 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TouchableOpacity, Modal, Alert, TextInput, FlatList, ScrollView, Vibration } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Modal, Alert, TextInput, Vibration } from 'react-native';
 import { useState, useRef, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import Task from './components/Task';
 import TaskList from './components/TaskList';
+import WelcomeModal from './components/WelcomeModal';
 
 export default function App() {
 
@@ -13,6 +13,10 @@ export default function App() {
   const inputRef = useRef(null)
   const [temporalTask, setTemporalTask] = useState([]);
   const [dailyTask, setDailyTask] = useState([]);
+  const [welcomeModal, setWelcomeModal] = useState(true)
+  const [verificationComplete, setVerificationComplete] = useState(false)
+
+
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -33,6 +37,19 @@ export default function App() {
       }
     }
     fetchTasks()
+  }, [])
+
+  useEffect(() => {
+    const checkShowWelcome = async () => {
+      try {
+        const show = await AsyncStorage.getItem("showWelcomeModal")
+        setWelcomeModal(show !== "false")
+        setVerificationComplete(true)
+      } catch (error) {
+        console.error("Error al cargar la configuracion del modal de bienvenida", error)
+      }
+    }
+    checkShowWelcome()
   }, [])
 
 
@@ -93,30 +110,37 @@ export default function App() {
     }
   }
 
-  handleCloseModal = () => {
+  const handleCloseModal = () => {
     setModalVisible(false)
     Vibration.vibrate(150)
   }
 
-  const ResetDailyTask = async () => {
+  const handleCloseModalWelcome = () => {
+    setWelcomeModal(false)
+    Vibration.vibrate(150)
+  }
+
+  const clearCache = async () => {
     try {
-      const newDailyTask = dailyTask.map((task) => ({
-        ...task,
-        completed: false
-      }))
-
-      await AsyncStorage.setItem('dailyTasks', JSON.stringify(newDailyTask))
-      setDailyTask(newDailyTask)
-
-      Alert.alert('Tareas diarias reinicidas exitosamente')
+      await AsyncStorage.removeItem("showWelcomeModal")
+      console.log("cache borrado exitosamente")
     } catch (error) {
-      console.error('Error al reiniciar las tareas diarias', error)
+      console.error("error al borrar cache", error)
     }
   }
 
+  if (!verificationComplete) {
+    return null;
+  }
 
   return (
     <View style={styles.container}>
+      <WelcomeModal
+        visible={welcomeModal}
+        onClose={handleCloseModalWelcome}
+      />
+
+
       <Modal
         transparent={true}
         visible={modalVisible}
@@ -131,13 +155,13 @@ export default function App() {
               ref={inputRef}
             />
             <View style={{ flexDirection: 'row', marginTop: 15 }}>
-              <TouchableOpacity style={styles.button} onPress={() => { addTask('temporal') }}><Text>Tarea temporal</Text></TouchableOpacity>
-              <TouchableOpacity style={styles.button} onPress={() => { addTask('diaria') }}><Text>Tarea diaria</Text></TouchableOpacity>
+              <TouchableOpacity style={styles.button} onPress={() => { addTask('diaria') }}><Text>Agregar tarea</Text></TouchableOpacity>
+              <TouchableOpacity style={styles.button} onPress={handleCloseModal}><Text>Cancelar</Text></TouchableOpacity>
             </View>
-            <TouchableOpacity style={styles.button} onPress={handleCloseModal}><Text>Cancelar</Text></TouchableOpacity>
           </View>
         </View>
       </Modal>
+
       <View style={styles.header}>
         <Text style={styles.leftText}>To-Do</Text>
         <TouchableOpacity style={styles.buttonRigth} onPress={() => {
@@ -146,55 +170,13 @@ export default function App() {
             inputRef.current.focus(); // Enfocar el TextInput
           }, 100); // Ajusta el tiempo si es necesario
         }}><Text>Agregar tarea</Text></TouchableOpacity>
+        {/* <TouchableOpacity style={styles.buttonRigth} onPress={clearCache}><Text>Cache</Text></TouchableOpacity> */}
       </View>
-      {/* <Text style={styles.leftText}>Tareas temporales</Text>
-      <ScrollView style={styles.list}>
-        {temporalTask.length === 0 ? (
-          <Text style={styles.textList}>No hay tareas pendientes</Text>
-        ) : (
-          temporalTask.map((item, index) => (
-            <Task
-              key={index.toString()}
-              task={item.text.trim()}
-              completed={item.completed}
-              onToggle={() => toggleTask(index, 'temporal')}
-            />
-          ))
-        )}
-      </ScrollView> */}
-
-      {/* <View style={styles.header}>
-        <Text style={styles.leftText}>Tareas diarias</Text>
-        <TouchableOpacity style={styles.buttonRigth} onPress={ResetDailyTask}><Text>Reiniciar diarias</Text></TouchableOpacity>
-
-
-      </View>
-
-      <ScrollView style={styles.list}
-        keyboardShouldPersistTaps="handled"
-      >
-        {dailyTask.length === 0 ? (
-          <Text style={styles.textList}>No hay tareas diarias</Text>
-        ) : (
-          dailyTask.map((item, index) => (
-            <TouchableOpacity>
-              <Task
-                key={index.toString()}
-                task={item.text.trim()}
-                completed={item.completed}
-                onToggle={() => toggleTask(index, 'diaria')}
-              />
-            </TouchableOpacity>
-
-          ))
-        )}
-      </ScrollView> */}
 
       <TaskList
         title={"Tareas pendientes"}
         tasks={dailyTask}
         toggleTask={toggleTask}
-        resetTask={ResetDailyTask}
         type="diaria"
       />
       <StatusBar style='dark' />
