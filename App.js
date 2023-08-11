@@ -19,15 +19,7 @@ export default function App() {
   const [verificationComplete, setVerificationComplete] = useState(false)
   const [infoModalVisible, setInfoModalVisible] = useState(false);
 
-  const openInfoModal = () => {
-    setInfoModalVisible(true);
-    Vibration.vibrate(150)
-  };
 
-  const closeInfoModal = () => {
-    setInfoModalVisible(false);
-    Vibration.vibrate(150)
-  };
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -63,12 +55,7 @@ export default function App() {
     checkShowWelcome()
   }, [])
 
-  const deleteTask = (index) => {
-    const newDailyTask = [...dailyTask];
-    newDailyTask.splice(index, 1);
-    setDailyTask(newDailyTask);
-    AsyncStorage.setItem('dailyTasks', JSON.stringify(newDailyTask));
-  }
+
 
   const addTask = async (type) => {
     if (newTask !== '') {
@@ -126,6 +113,7 @@ export default function App() {
     }
   }
 
+  // Handles
   const handleCloseModal = () => {
     setModalVisible(false)
     Vibration.vibrate(150)
@@ -135,6 +123,33 @@ export default function App() {
     setWelcomeModal(false)
     Vibration.vibrate(150)
   }
+
+  const handleDeleteTask = (index) => {
+    const newDailyTask = [...dailyTask];
+    newDailyTask.splice(index, 1);
+    setDailyTask(newDailyTask);
+    AsyncStorage.setItem('dailyTasks', JSON.stringify(newDailyTask));
+  }
+
+  const handleOpenInfoModal = () => {
+    setInfoModalVisible(true);
+    Vibration.vibrate(150)
+  };
+
+  const handleCloseInfoModal = () => {
+    setInfoModalVisible(false);
+    Vibration.vibrate(150)
+  };
+
+  const handleAddTaskModal = () => {
+    setModalVisible(true);
+    setTimeout(() => {
+      inputRef.current.focus();
+    }, 100);
+    Vibration.vibrate(150)
+  }
+
+  //End Handle
 
   const clearCache = async () => {
     try {
@@ -164,14 +179,16 @@ export default function App() {
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalView}>
+            <Text style={styles.text}>Agregar nuevo pendiente</Text>
             <TextInput
-              placeholder='Agregar nueva tarea'
+              autoFocus={true}
               value={newTask}
               onChangeText={text => setNewTask(text)}
               ref={inputRef}
+              style={{ marginTop: 10 }}
             />
             <View style={{ flexDirection: 'row', marginTop: 15 }}>
-              <TouchableOpacity style={styles.button} onPress={() => { addTask('diaria') }}><Text>Agregar tarea</Text></TouchableOpacity>
+              <TouchableOpacity style={styles.button} onPress={() => { addTask('diaria') }}><Text>Agregar</Text></TouchableOpacity>
               <TouchableOpacity style={styles.button} onPress={handleCloseModal}><Text>Cancelar</Text></TouchableOpacity>
             </View>
           </View>
@@ -179,25 +196,20 @@ export default function App() {
       </Modal>
 
       <View style={styles.header}>
-        <TouchableOpacity onPress={openInfoModal} style={styles.leftText}>
+        <TouchableOpacity onPress={handleOpenInfoModal} style={styles.leftText}>
           <Entypo name="info-with-circle" size={27} color="black" />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.buttonRigth} onPress={() => {
-          setModalVisible(true);
-          setTimeout(() => {
-            inputRef.current.focus();
-          }, 100);
-        }}><Text>Agregar tarea</Text></TouchableOpacity>
+        <TouchableOpacity style={styles.buttonRigth} onPress={handleAddTaskModal}><Text>Agregar tarea</Text></TouchableOpacity>
 
         {/* <TouchableOpacity style={styles.buttonRigth} onPress={clearCache}><Text>Cache</Text></TouchableOpacity> */}
 
       </View>
-      <InfoModal visible={infoModalVisible} onClose={closeInfoModal} />
+      <InfoModal visible={infoModalVisible} onClose={handleCloseInfoModal} />
       <TaskList
-        title={"Tareas pendientes"}
+        title={"Lista de pendientes"}
         tasks={dailyTask}
         toggleTask={toggleTask}
-        deleteTask={deleteTask}
+        deleteTask={handleDeleteTask}
         type="diaria"
       />
       <StatusBar style='dark' />
@@ -217,6 +229,11 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     marginTop: 40,
+  },
+  text: {
+    color: 'black',
+    fontSize: 19,
+    margin: 'auto',
   },
   leftText: {
     color: 'black',

@@ -1,10 +1,11 @@
 import { View, Text, StyleSheet } from "react-native"
 import CheckBox from 'expo-checkbox'
+import { Vibration } from "react-native"
 
 const Task = ({ task, completed, onToggle }) => {
     return (
         <View style={styles.taskContainer}>
-            <CheckBox value={completed} onValueChange={onToggle} />
+            <CheckBox value={completed} onValueChange={newValue => { Vibration.vibrate(100), onToggle(newValue) }} />
             <Text style={[styles.text, completed && styles.completedTask]}><Text>{task}</Text></Text>
         </View>
     )

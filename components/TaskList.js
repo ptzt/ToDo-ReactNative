@@ -69,14 +69,7 @@ const styles = StyleSheet.create({
         opacity: 0.3,
         fontWeight: 'bold'
     },
-    buttonRigth: {
-        borderRadius: 20,
-        padding: 10,
-        elevation: 2,
-        backgroundColor: 'white',
-        alignSelf: 'flex-end',
-        marginRight: 20
-    },
+
 })
 
 
