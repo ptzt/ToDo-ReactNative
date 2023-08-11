@@ -7,8 +7,8 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "resizeMode": "contain",
-      "backgroundColor": "#FAF9F6"
+      "image": "./assets/splash.png",
+      "resizeMode": "contain"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -18,7 +18,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "image": "./assets/icon.png",
+        "image": "./assets/adaptative-icon.png",
         "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#ffffff"
       },
