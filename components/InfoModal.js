@@ -1,5 +1,5 @@
 import React from "react";
-import { Modal, Text, View, TouchableOpacity, StyleSheet } from "react-native";
+import { Modal, Text, View, TouchableOpacity, StyleSheet, Linking } from "react-native";
 
 const InfoModal = ({ visible, onClose }) => {
     return (
@@ -8,8 +8,10 @@ const InfoModal = ({ visible, onClose }) => {
                 <View style={styles.infoModalView}>
                     <Text style={styles.infoTitle}>Información</Text>
                     <Text style={styles.infoText}>
-                        Aquí puedes agregar y administrar tus tareas pendientes.
-                        {/* Agrega más información si es necesario */}
+                        Para borrar una tarea ya finalizada basta con mantenerla presionada!
+                        {"\n"}
+                        {"\n"}
+                        Esta es un App en desarrollo asi que cualquier error que encuentres o sugerencia puedes mandarme un mensaje a mi <Text style={{ color: 'blue' }} onPress={() => Linking.openURL('https://twitter.com/ptztdev')}>Twitter.</Text>
                     </Text>
                     <TouchableOpacity onPress={onClose} style={styles.button}>
                         <Text>Cerrar</Text>
