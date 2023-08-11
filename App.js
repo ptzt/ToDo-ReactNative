@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Task from './components/Task';
+import TaskList from './components/TaskList';
 
 export default function App() {
 
@@ -145,10 +146,8 @@ export default function App() {
             inputRef.current.focus(); // Enfocar el TextInput
           }, 100); // Ajusta el tiempo si es necesario
         }}><Text>Agregar tarea</Text></TouchableOpacity>
-
-
       </View>
-      <Text style={styles.leftText}>Tareas temporales</Text>
+      {/* <Text style={styles.leftText}>Tareas temporales</Text>
       <ScrollView style={styles.list}>
         {temporalTask.length === 0 ? (
           <Text style={styles.textList}>No hay tareas pendientes</Text>
@@ -162,27 +161,9 @@ export default function App() {
             />
           ))
         )}
-      </ScrollView>
+      </ScrollView> */}
 
-      {/* <FlatList
-        style={styles.list}
-        ListEmptyComponent={<Text style={styles.textList}>No hay tareas pendientes</Text>}
-        data={temporalTask}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item, index }) => (<Task task={item.text.trim()} completed={item.completed} onToggle={() => toggleTask(index, 'temporal')} />)}
-      /> */}
-      {/* <FlatList
-        style={styles.list}
-        ListHeaderComponent={<Text style={styles.text}>Tareas diarias</Text>}
-        ListEmptyComponent={<Text style={styles.textList}>No hay tareas diarias</Text>}
-        keyboardShouldPersistTaps="handled"
-        data={dailyTask}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item, index }) => (<Task task={item.text.trim()} completed={item.completed} onToggle={() => toggleTask(index, 'diaria')} />)}
-      /> */}
-
-
-      <View style={styles.header}>
+      {/* <View style={styles.header}>
         <Text style={styles.leftText}>Tareas diarias</Text>
         <TouchableOpacity style={styles.buttonRigth} onPress={ResetDailyTask}><Text>Reiniciar diarias</Text></TouchableOpacity>
 
@@ -196,15 +177,26 @@ export default function App() {
           <Text style={styles.textList}>No hay tareas diarias</Text>
         ) : (
           dailyTask.map((item, index) => (
-            <Task
-              key={index.toString()}
-              task={item.text.trim()}
-              completed={item.completed}
-              onToggle={() => toggleTask(index, 'diaria')}
-            />
+            <TouchableOpacity>
+              <Task
+                key={index.toString()}
+                task={item.text.trim()}
+                completed={item.completed}
+                onToggle={() => toggleTask(index, 'diaria')}
+              />
+            </TouchableOpacity>
+
           ))
         )}
-      </ScrollView>
+      </ScrollView> */}
+
+      <TaskList
+        title={"Tareas pendientes"}
+        tasks={dailyTask}
+        toggleTask={toggleTask}
+        resetTask={ResetDailyTask}
+        type="diaria"
+      />
       <StatusBar style='dark' />
     </View >
   );
