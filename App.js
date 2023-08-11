@@ -82,6 +82,7 @@ export default function App() {
     Vibration.vibrate(150)
   }
 
+  //Refactorizar pendiente
   const toggleTask = async (index, type) => {
     if (type === 'temporal') {
       const newTempTask = temporalTask.filter((_, i) => i !== index)
