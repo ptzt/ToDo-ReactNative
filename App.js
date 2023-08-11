@@ -73,7 +73,7 @@ export default function App() {
         }
         setNewTask('')
         setModalVisible(false)
-        Alert.alert('Se agrego!')
+        // Alert.alert('Se agrego!')
       } catch (error) {
         console.error('Error al agregar la tarea:', error)
       }
