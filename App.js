@@ -21,10 +21,12 @@ export default function App() {
 
   const openInfoModal = () => {
     setInfoModalVisible(true);
+    Vibration.vibrate(150)
   };
 
   const closeInfoModal = () => {
     setInfoModalVisible(false);
+    Vibration.vibrate(150)
   };
 
   useEffect(() => {
