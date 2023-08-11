@@ -1,6 +1,7 @@
 import React from "react"
 import { Modal, Text, View, TouchableOpacity, StyleSheet } from "react-native"
 import AsyncStorage from "@react-native-async-storage/async-storage"
+import { Entypo } from '@expo/vector-icons';
 
 
 const WelcomeModal = ({ visible, onClose }) => {
@@ -20,7 +21,7 @@ const WelcomeModal = ({ visible, onClose }) => {
             <View style={styles.modalContainer}>
                 <View style={styles.modalView}>
                     <Text style={styles.title}>Bienvenido a la aplicacion!</Text>
-                    <Text style={styles.description}>Muchas gracias por usar esta App, como es bien sabido sigue en desarrollo asi que si encuentras algun bug o quieres hacer una sugerencia no dudes en contactarte conmigo!</Text>
+                    <Text style={styles.description}>Muchas gracias por usar esta App, como es bien sabido sigue en desarrollo asi que si encuentras algun bug o quieres hacer una sugerencia no dudes en contactarte conmigo! Tienes mas informacion en el icono central <Entypo name="info-with-circle" size={17} color="black" />.</Text>
                     <TouchableOpacity onPress={handleCloseModal} style={styles.button}>
                         <Text>Cerrar</Text>
                     </TouchableOpacity>
