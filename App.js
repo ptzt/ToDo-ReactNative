@@ -2,9 +2,12 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TouchableOpacity, Modal, Alert, TextInput, Vibration } from 'react-native';
 import { useState, useRef, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AntDesign } from '@expo/vector-icons';
+import { Entypo } from '@expo/vector-icons';
 
 import TaskList from './components/TaskList';
 import WelcomeModal from './components/WelcomeModal';
+import InfoModal from './components/InfoModal';
 
 export default function App() {
 
@@ -15,8 +18,15 @@ export default function App() {
   const [dailyTask, setDailyTask] = useState([]);
   const [welcomeModal, setWelcomeModal] = useState(true)
   const [verificationComplete, setVerificationComplete] = useState(false)
+  const [infoModalVisible, setInfoModalVisible] = useState(false);
 
+  const openInfoModal = () => {
+    setInfoModalVisible(true);
+  };
 
+  const closeInfoModal = () => {
+    setInfoModalVisible(false);
+  };
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -169,15 +179,20 @@ export default function App() {
 
       <View style={styles.header}>
         <Text style={styles.leftText}>To-Do</Text>
+        <TouchableOpacity onPress={openInfoModal}>
+          <Entypo name="info-with-circle" size={27} color="black" />
+        </TouchableOpacity>
         <TouchableOpacity style={styles.buttonRigth} onPress={() => {
           setModalVisible(true);
           setTimeout(() => {
             inputRef.current.focus();
           }, 100);
         }}><Text>Agregar tarea</Text></TouchableOpacity>
-        {/* <TouchableOpacity style={styles.buttonRigth} onPress={clearCache}><Text>Cache</Text></TouchableOpacity> */}
-      </View>
 
+        {/* <TouchableOpacity style={styles.buttonRigth} onPress={clearCache}><Text>Cache</Text></TouchableOpacity> */}
+
+      </View>
+      <InfoModal visible={infoModalVisible} onClose={closeInfoModal} />
       <TaskList
         title={"Tareas pendientes"}
         tasks={dailyTask}
@@ -198,7 +213,7 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-evenly',
     width: '100%',
     alignItems: 'center',
     marginTop: 40,
