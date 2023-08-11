@@ -179,8 +179,7 @@ export default function App() {
       </Modal>
 
       <View style={styles.header}>
-        <Text style={styles.leftText}>To-Do</Text>
-        <TouchableOpacity onPress={openInfoModal}>
+        <TouchableOpacity onPress={openInfoModal} style={styles.leftText}>
           <Entypo name="info-with-circle" size={27} color="black" />
         </TouchableOpacity>
         <TouchableOpacity style={styles.buttonRigth} onPress={() => {
@@ -214,12 +213,10 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: 'row',
-    justifyContent: 'space-evenly',
+    justifyContent: 'space-between',
     width: '100%',
     alignItems: 'center',
     marginTop: 40,
-    marginBottom: 10,
-
   },
   leftText: {
     color: 'black',
@@ -234,14 +231,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     alignSelf: 'flex-end',
     marginRight: 20
-  },
-  list: { marginLeft: 20, height: '100%', width: '100%' },
-  textList: {
-    fontSize: 20,
-    color: 'black',
-    marginTop: 20,
-    opacity: 0.3,
-    fontWeight: 'bold'
   },
   modalView: {
     backgroundColor: '#FAF9F6',
@@ -264,10 +253,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: 'rgba(0,0,0,0.6)',
   },
-  checkbox: {
-    flexDirection: 'row',
-    marginRight: 4,
-    marginLeft: 4,
-    padding: 8
-  }
+
 });

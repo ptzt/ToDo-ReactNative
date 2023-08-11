@@ -47,13 +47,14 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         width: '100%',
         alignItems: 'center',
-        marginTop: 40,
+        marginTop: 20,
         marginBottom: 10,
 
     },
     leftText: {
         color: 'black',
-        fontSize: 21,
+        fontSize: 24,
+        fontWeight: 'bold',
         margin: 'auto'
     },
     list: {
