@@ -4,23 +4,30 @@ import { ScrollView, TouchableOpacity, Text, View, StyleSheet, Alert } from "rea
 import Task from "./Task"
 
 
-const TaskList = ({ title, resetTask, tasks, toggleTask, type }) => {
+const TaskList = ({ title, tasks, toggleTask, type, deleteTask }) => {
+
+    const confirmDeleteTask = (index) => {
+        Alert.alert(
+            'Eliminar tarea',
+            '¿Estás seguro de que deseas eliminar esta tarea?',
+            [
+                { text: 'Cancelar', style: 'cancel' },
+                { text: 'Eliminar', onPress: () => deleteTask(index) }
+            ]
+        );
+    };
+
     return (
         <ScrollView style={styles.list}>
             <View style={styles.header}>
                 <Text style={styles.leftText}>{title}</Text>
-                {/* {resetTask && (
-                    <TouchableOpacity style={styles.buttonRigth} onPress={resetTask}>
-                        <Text>Reiniciar diarias</Text>
-                    </TouchableOpacity>
-                )} */}
             </View>
 
             {tasks.length === 0 ? (
                 <Text style={styles.textList}>No hay tareas pendientes</Text>
             ) : (
                 tasks.map((item, index) => (
-                    <TouchableOpacity key={index} onLongPress={() => Alert.alert('Probando')}>
+                    <TouchableOpacity key={index} onLongPress={() => confirmDeleteTask(index)}>
                         <Task
                             key={index.toString()}
                             task={item.text.trim()}

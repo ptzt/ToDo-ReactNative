@@ -52,7 +52,12 @@ export default function App() {
     checkShowWelcome()
   }, [])
 
-
+  const deleteTask = (index) => {
+    const newDailyTask = [...dailyTask];
+    newDailyTask.splice(index, 1);
+    setDailyTask(newDailyTask);
+    AsyncStorage.setItem('dailyTasks', JSON.stringify(newDailyTask));
+  }
 
   const addTask = async (type) => {
     if (newTask !== '') {
@@ -167,8 +172,8 @@ export default function App() {
         <TouchableOpacity style={styles.buttonRigth} onPress={() => {
           setModalVisible(true);
           setTimeout(() => {
-            inputRef.current.focus(); // Enfocar el TextInput
-          }, 100); // Ajusta el tiempo si es necesario
+            inputRef.current.focus();
+          }, 100);
         }}><Text>Agregar tarea</Text></TouchableOpacity>
         {/* <TouchableOpacity style={styles.buttonRigth} onPress={clearCache}><Text>Cache</Text></TouchableOpacity> */}
       </View>
@@ -177,6 +182,7 @@ export default function App() {
         title={"Tareas pendientes"}
         tasks={dailyTask}
         toggleTask={toggleTask}
+        deleteTask={deleteTask}
         type="diaria"
       />
       <StatusBar style='dark' />
