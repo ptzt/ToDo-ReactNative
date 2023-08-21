@@ -13,34 +13,10 @@ export default function App() {
   const [modalVisible, setModalVisible] = useState(false)
   const [newTask, setNewTask] = useState('')
   const inputRef = useRef(null)
-  const [temporalTask, setTemporalTask] = useState([]);
   const [dailyTask, setDailyTask] = useState([]);
   const [welcomeModal, setWelcomeModal] = useState(true)
   const [verificationComplete, setVerificationComplete] = useState(false)
   const [infoModalVisible, setInfoModalVisible] = useState(false);
-
-
-
-  useEffect(() => {
-    const fetchTasks = async () => {
-      try {
-        const temporalTasks = await AsyncStorage.getItem('temporalTasks')
-        const dailyTasks = await AsyncStorage.getItem('dailyTasks')
-
-        if (temporalTasks) {
-          setTemporalTask(JSON.parse(temporalTasks))
-        }
-
-        if (dailyTasks) {
-          setDailyTask(JSON.parse(dailyTasks))
-        }
-
-      } catch (error) {
-        console.error('Error al cargar las tareas:', error)
-      }
-    }
-    fetchTasks()
-  }, [])
 
   useEffect(() => {
     const checkShowWelcome = async () => {
@@ -56,19 +32,31 @@ export default function App() {
   }, [])
 
 
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        const dailyTasks = await AsyncStorage.getItem('dailyTasks')
+
+        if (dailyTasks) {
+          setDailyTask(JSON.parse(dailyTasks))
+        }
+
+      } catch (error) {
+        console.error('Error al cargar las tareas:', error)
+      }
+    }
+    fetchTasks()
+  }, [])
+
 
   const addTask = async (type) => {
     if (newTask !== '') {
-      const newTaskObj = { text: newTask, completed: false, type: type }
+      const newTaskObj = { text: newTask, completed: false }
 
       try {
-        if (type === 'temporal') {
-          setTemporalTask([...temporalTask, newTaskObj])
-          await AsyncStorage.setItem('temporalTasks', JSON.stringify([...temporalTask, newTaskObj]))
-        } else if (type === 'diaria') {
-          setDailyTask([...dailyTask, newTaskObj])
-          await AsyncStorage.setItem('dailyTasks', JSON.stringify([...temporalTask, newTaskObj]))
-        }
+        setDailyTask([...dailyTask, newTaskObj])
+        await AsyncStorage.setItem('dailyTasks', JSON.stringify([...dailyTask, newTaskObj]))
+
         setNewTask('')
         setModalVisible(false)
         // Alert.alert('Se agrego!')
@@ -83,34 +71,22 @@ export default function App() {
   }
 
   //Refactorizar pendiente
-  const toggleTask = async (index, type) => {
-    if (type === 'temporal') {
-      const newTempTask = temporalTask.filter((_, i) => i !== index)
-      setTemporalTask(newTempTask)
-
-      try {
-        await AsyncStorage.setItem('temporalTasks', JSON.stringify(newTempTask))
-      } catch (error) {
-        console.error('Error al actualizar las tareas temporales:', error)
-      }
-
-    } else if (type === 'diaria') {
-      const newDailyTask = dailyTask.map((task, i) => {
-        if (i === index) {
-          return {
-            ...task,
-            completed: !task.completed
-          }
+  const toggleTask = async (index) => {
+    const newDailyTask = dailyTask.map((task, i) => {
+      if (i === index) {
+        return {
+          ...task,
+          completed: !task.completed
         }
-        return task
-      })
-      setDailyTask(newDailyTask)
-
-      try {
-        await AsyncStorage.setItem('dailyTasks', JSON.stringify(newDailyTask))
-      } catch (error) {
-        console.error('Error al actualizar las tareas diarias:', error)
       }
+      return task
+    })
+    setDailyTask(newDailyTask)
+
+    try {
+      await AsyncStorage.setItem('dailyTasks', JSON.stringify(newDailyTask))
+    } catch (error) {
+      console.error('Error al actualizar las tareas diarias:', error)
     }
   }
 
@@ -211,7 +187,6 @@ export default function App() {
         tasks={dailyTask}
         toggleTask={toggleTask}
         deleteTask={handleDeleteTask}
-        type="diaria"
       />
       <StatusBar style='dark' />
     </View >
