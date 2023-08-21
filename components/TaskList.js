@@ -1,12 +1,12 @@
 import React from "react"
-import { ScrollView, TouchableOpacity, Text, View, StyleSheet, Alert } from "react-native"
-
+import { ScrollView, TouchableOpacity, Text, View, StyleSheet, Alert, Vibration } from "react-native"
 import Task from "./Task"
 
 
 const TaskList = ({ title, tasks, toggleTask, deleteTask }) => {
 
     const confirmDeleteTask = (index) => {
+        Vibration.vibrate(150)
         Alert.alert(
             'Eliminar tarea',
             '¿Estás seguro de que deseas eliminar esta tarea?',

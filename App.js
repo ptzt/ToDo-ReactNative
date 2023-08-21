@@ -162,7 +162,9 @@ export default function App() {
               value={newTask}
               onChangeText={text => setNewTask(text)}
               ref={inputRef}
-              style={{ marginTop: 10 }}
+              style={styles.input}
+              selectionColor={'black'}
+              placeholder='Escriba tu pendiente'
             />
             <View style={{ flexDirection: 'row', marginTop: 15 }}>
               <TouchableOpacity style={styles.button} onPress={() => { addTask('diaria') }}><Text>Agregar</Text></TouchableOpacity>
@@ -246,5 +248,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: 'rgba(0,0,0,0.6)',
   },
+  input: {
+    borderWidth: 1,
+    borderColor: 'black',
+    borderRadius: 3,
+    width: 190,
+    marginTop: 20,
+    padding: 6
+
+  }
 
 });
