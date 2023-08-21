@@ -12,11 +12,11 @@ export default function App() {
 
   const [modalVisible, setModalVisible] = useState(false)
   const [newTask, setNewTask] = useState('')
-  const inputRef = useRef(null)
   const [dailyTask, setDailyTask] = useState([]);
   const [welcomeModal, setWelcomeModal] = useState(true)
   const [verificationComplete, setVerificationComplete] = useState(false)
   const [infoModalVisible, setInfoModalVisible] = useState(false);
+  const inputRef = useRef(null);
 
   useEffect(() => {
     const checkShowWelcome = async () => {
@@ -122,7 +122,7 @@ export default function App() {
     setModalVisible(true);
     setTimeout(() => {
       inputRef.current.focus();
-    }, 100);
+    }, 200);
     Vibration.vibrate(150)
   }
 
