@@ -196,7 +196,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FAF9F6',
+    backgroundColor: '#f6f6f6',
     alignItems: 'flex-start',
   },
   header: {

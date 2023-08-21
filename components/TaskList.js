@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     },
     textList: {
         fontSize: 20,
-        color: 'black',
+        color: '#393e46',
         marginTop: 20,
         opacity: 0.3,
         fontWeight: 'bold'

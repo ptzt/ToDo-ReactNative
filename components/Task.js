@@ -13,9 +13,10 @@ const Task = ({ task, completed, onToggle }) => {
 
 const styles = StyleSheet.create({
     text: {
-        color: 'black',
+        color: '#222831',
         padding: 5,
-        fontSize: 17,
+        fontSize: 18,
+        fontWeight: "500"
     },
     taskContainer: {
         flexDirection: 'row',
@@ -25,7 +26,7 @@ const styles = StyleSheet.create({
     },
     completedTask: {
         textDecorationLine: 'line-through',
-        color: 'black'
+        color: '#222831'
     }
 })
 

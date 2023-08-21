@@ -19,7 +19,6 @@
     "android": {
       "adaptiveIcon": {
         "image": "./assets/icon.png",
-        "backgroundColor": "#ffffff"
       },
       "package": "com.ptzt.ToDo"
     },
