@@ -4,7 +4,7 @@ import { ScrollView, TouchableOpacity, Text, View, StyleSheet, Alert } from "rea
 import Task from "./Task"
 
 
-const TaskList = ({ title, tasks, toggleTask, type, deleteTask }) => {
+const TaskList = ({ title, tasks, toggleTask, deleteTask }) => {
 
     const confirmDeleteTask = (index) => {
         Alert.alert(
@@ -32,7 +32,7 @@ const TaskList = ({ title, tasks, toggleTask, type, deleteTask }) => {
                             key={index.toString()}
                             task={item.text.trim()}
                             completed={item.completed}
-                            onToggle={() => toggleTask(index, type)}
+                            onToggle={() => toggleTask(index)}
                         />
                     </TouchableOpacity>
                 ))
