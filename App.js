@@ -71,24 +71,42 @@ export default function App() {
   }
 
   //Refactorizar pendiente
+  // const toggleTask = async (index) => {
+  //   const newDailyTask = dailyTask.map((task, i) => {
+  //     if (i === index) {
+  //       return {
+  //         ...task,
+  //         completed: !task.completed
+  //       }
+  //     }
+  //     return task
+  //   })
+  //   setDailyTask(newDailyTask)
+
+  //   try {
+  //     await AsyncStorage.setItem('dailyTasks', JSON.stringify(newDailyTask))
+  //   } catch (error) {
+  //     console.error('Error al actualizar las tareas diarias:', error)
+  //   }
+  // }
+
   const toggleTask = async (index) => {
-    const newDailyTask = dailyTask.map((task, i) => {
-      if (i === index) {
-        return {
-          ...task,
-          completed: !task.completed
-        }
-      }
-      return task
-    })
-    setDailyTask(newDailyTask)
+    const taskToToggle = dailyTask[index];
+
+    const newDailyTask = dailyTask.filter((task, i) => i !== index);
+
+    taskToToggle.completed = !taskToToggle.completed;
+    newDailyTask.push(taskToToggle);
+
+    setDailyTask(newDailyTask);
 
     try {
-      await AsyncStorage.setItem('dailyTasks', JSON.stringify(newDailyTask))
+      await AsyncStorage.setItem('dailyTasks', JSON.stringify(newDailyTask));
     } catch (error) {
-      console.error('Error al actualizar las tareas diarias:', error)
+      console.error('Error al actualizar las tareas diarias:', error);
     }
   }
+
 
   // Handles
   const handleCloseModal = () => {
