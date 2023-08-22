@@ -49,13 +49,13 @@ export default function App() {
   }, [])
 
 
-  const addTask = async (type) => {
+  const addTask = async () => {
     if (newTask !== '') {
       const newTaskObj = { text: newTask, completed: false }
 
       try {
-        setDailyTask([...dailyTask, newTaskObj])
-        await AsyncStorage.setItem('dailyTasks', JSON.stringify([...dailyTask, newTaskObj]))
+        setDailyTask([newTaskObj, ...dailyTask])
+        await AsyncStorage.setItem('dailyTasks', JSON.stringify([newTaskObj, ...dailyTask]))
 
         setNewTask('')
         setModalVisible(false)
