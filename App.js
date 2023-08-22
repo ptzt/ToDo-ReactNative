@@ -70,42 +70,40 @@ export default function App() {
     Vibration.vibrate(150)
   }
 
-  //Refactorizar pendiente
-  // const toggleTask = async (index) => {
-  //   const newDailyTask = dailyTask.map((task, i) => {
-  //     if (i === index) {
-  //       return {
-  //         ...task,
-  //         completed: !task.completed
-  //       }
-  //     }
-  //     return task
-  //   })
-  //   setDailyTask(newDailyTask)
-
-  //   try {
-  //     await AsyncStorage.setItem('dailyTasks', JSON.stringify(newDailyTask))
-  //   } catch (error) {
-  //     console.error('Error al actualizar las tareas diarias:', error)
-  //   }
-  // }
 
   const toggleTask = async (index) => {
-    const taskToToggle = dailyTask[index];
+    const newDailyTask = [...dailyTask];
 
-    const newDailyTask = dailyTask.filter((task, i) => i !== index);
+    // Cambia el estado de completado de la tarea específica
+    newDailyTask[index] = {
+      ...newDailyTask[index],
+      completed: !newDailyTask[index].completed,
+    };
 
-    taskToToggle.completed = !taskToToggle.completed;
-    newDailyTask.push(taskToToggle);
+    // Separa las tareas completadas y no completadas
+    const completedTasks = [];
+    const uncompletedTasks = [];
 
-    setDailyTask(newDailyTask);
+    newDailyTask.forEach((task) => {
+      if (task.completed) {
+        completedTasks.push(task);
+      } else {
+        uncompletedTasks.push(task);
+      }
+    });
+
+    // Combina las tareas en el orden deseado (no completadas arriba, completadas abajo)
+    const updatedDailyTask = [...uncompletedTasks, ...completedTasks];
+
+    setDailyTask(updatedDailyTask);
 
     try {
-      await AsyncStorage.setItem('dailyTasks', JSON.stringify(newDailyTask));
+      await AsyncStorage.setItem('dailyTasks', JSON.stringify(updatedDailyTask));
     } catch (error) {
       console.error('Error al actualizar las tareas diarias:', error);
     }
-  }
+  };
+
 
 
   // Handles
