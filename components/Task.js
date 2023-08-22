@@ -1,12 +1,20 @@
-import { View, Text, StyleSheet } from "react-native"
+import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native"
 import CheckBox from 'expo-checkbox'
 import { Vibration } from "react-native"
 
-const Task = ({ task, completed, onToggle }) => {
+const Task = ({ task, completed, onToggle, onDeleteTask }) => {
     return (
         <View style={styles.taskContainer}>
-            <CheckBox value={completed} onValueChange={newValue => { Vibration.vibrate(100), onToggle(newValue) }} />
-            <Text style={[styles.text, completed && styles.completedTask]}><Text>{task}</Text></Text>
+            <View style={styles.taskInfo}>
+                <CheckBox value={completed} onValueChange={newValue => { Vibration.vibrate(100), onToggle(newValue) }} />
+                <TouchableOpacity onLongPress={() => Alert.alert('Modal ')}>
+
+                    <Text style={[styles.text, completed && styles.completedTask]}><Text>{task}</Text></Text>
+                </TouchableOpacity>
+            </View>
+            <TouchableOpacity style={styles.deleteButton} onPress={onDeleteTask}>
+                <Text style={styles.deleteText}>X</Text>
+            </TouchableOpacity>
         </View>
     )
 }
@@ -21,13 +29,30 @@ const styles = StyleSheet.create({
     taskContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'flex-start',
-        width: '100%'
+        justifyContent: 'space-between',
+        width: '90%',
+        marginBottom: 10,
+        borderBottomColor: 'grey',
+        borderBottomWidth: 0.3,
     },
     completedTask: {
         textDecorationLine: 'line-through',
         color: '#222831'
-    }
+    },
+    deleteButton: {
+        borderRadius: 15,
+        paddingHorizontal: 10,
+        paddingVertical: 5,
+    },
+    deleteText: {
+        color: '#222831',
+        fontWeight: 'bold',
+        fontSize: 16,
+    },
+    taskInfo: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
 })
 
 export default Task

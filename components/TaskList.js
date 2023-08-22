@@ -5,6 +5,9 @@ import Task from "./Task"
 
 const TaskList = ({ title, tasks, toggleTask, deleteTask }) => {
 
+
+
+
     const confirmDeleteTask = (index) => {
         Vibration.vibrate(150)
         Alert.alert(
@@ -27,14 +30,13 @@ const TaskList = ({ title, tasks, toggleTask, deleteTask }) => {
                 <Text style={styles.textList}>No hay tareas pendientes</Text>
             ) : (
                 tasks.map((item, index) => (
-                    <TouchableOpacity key={index} onLongPress={() => confirmDeleteTask(index)}>
-                        <Task
-                            key={index.toString()}
-                            task={item.text.trim()}
-                            completed={item.completed}
-                            onToggle={() => toggleTask(index)}
-                        />
-                    </TouchableOpacity>
+                    <Task
+                        key={index.toString()}
+                        task={item.text.trim()}
+                        completed={item.completed}
+                        onToggle={() => toggleTask(index)}
+                        onDeleteTask={() => confirmDeleteTask(index)}
+                    />
                 ))
             )}
         </ScrollView>
